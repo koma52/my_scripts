@@ -56,7 +56,7 @@ echo "            \"command\": \"dotnet\"," >> .vscode/tasks.json
 echo "            \"type\": \"process\"," >> .vscode/tasks.json
 echo "            \"args\": [" >> .vscode/tasks.json
 echo "                \"build\"," >> .vscode/tasks.json
-echo "                \"\${workspaceFolder}/${PROJ: -11}\"," >> .vscode/tasks.json
+echo "                \"\${workspaceFolder}/${PROJ: 2}\"," >> .vscode/tasks.json
 echo "               \"/property:GenerateFullPaths=true\"," >> .vscode/tasks.json
 echo "                \"/consoleloggerparameters:NoSummary\"" >> .vscode/tasks.json
 echo "            ]," >> .vscode/tasks.json
@@ -68,7 +68,7 @@ echo "            \"command\": \"dotnet\"," >> .vscode/tasks.json
 echo "            \"type\": \"process\"," >> .vscode/tasks.json
 echo "      \"args\": [" >> .vscode/tasks.json
 echo "                \"publish\"," >> .vscode/tasks.json
-echo "                \"\${workspaceFolder}/${PROJ: -11}\"," >> .vscode/tasks.json
+echo "                \"\${workspaceFolder}/${PROJ: 2}\"," >> .vscode/tasks.json
 echo "                \"/property:GenerateFullPaths=true\"," >> .vscode/tasks.json
 echo "                \"/consoleloggerparameters:NoSummary\"" >> .vscode/tasks.json
 echo "            ]," >> .vscode/tasks.json
@@ -81,7 +81,7 @@ echo "            \"type\": \"process\"," >> .vscode/tasks.json
 echo "            \"args\": [" >> .vscode/tasks.json
 echo "                \"watch\"," >> .vscode/tasks.json
 echo "                \"run\"," >> .vscode/tasks.json
-echo "                \"\${workspaceFolder}/${PROJ: -11}\"," >> .vscode/tasks.json
+echo "                \"\${workspaceFolder}/${PROJ: 2}\"," >> .vscode/tasks.json
 echo "                \"/property:GenerateFullPaths=true\"," >> .vscode/tasks.json
 echo "                \"/consoleloggerparameters:NoSummary\"" >> .vscode/tasks.json
 echo "            ]," >> .vscode/tasks.json
