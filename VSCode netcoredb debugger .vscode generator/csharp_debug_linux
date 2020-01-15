@@ -1,0 +1,112 @@
+#!/bin/bash
+
+create(){
+#find the .dll file of the project
+FILE=$( find bin/Debug -name "*.dll" )
+
+#find the .csproj file
+PROJ=$( find -name "*.csproj" )
+
+#ask for the netcoredbg installation folder and store it
+echo "Please type your netcoredbg installation's absolute path! (e.g.: ~/.local/bin/netcoredbg)"
+
+read DEB
+
+if [[ "${DEB:${#DEB}-1}" == "/" ]]
+then
+    DEB="${DEB: : -1}"
+fi
+
+#create the .vscode folder in project folder
+mkdir .vscode
+
+#create launch.json line by line
+echo "{" > .vscode/launch.json
+echo "\"version\": \"0.2.0\"," >> .vscode/launch.json
+echo " \"configurations\": [" >> .vscode/launch.json
+echo "  {" >> .vscode/launch.json
+echo "       \"name\": \".NET Core Launch (console)\"," >> .vscode/launch.json
+echo "      \"type\": \"coreclr\"," >> .vscode/launch.json
+echo "      \"request\": \"launch\"," >> .vscode/launch.json
+echo "      \"preLaunchTask\": \"build\"," >> .vscode/launch.json
+echo "      \"program\": \"\${workspaceFolder}/${FILE}\"," >> .vscode/launch.json
+echo "      \"args\": []," >> .vscode/launch.json
+echo "      \"cwd\": \"\${workspaceFolder}\"," >> .vscode/launch.json
+echo "      \"console\": \"integratedTerminal\"," >> .vscode/launch.json
+echo "      \"stopAtEntry\": false," >> .vscode/launch.json
+echo "      \"internalConsoleOptions\": \"openOnSessionStart\"," >> .vscode/launch.json
+echo "      \"pipeTransport\": {" >> .vscode/launch.json
+echo "          \"pipeCwd\": \"\${workspaceFolder}\"," >> .vscode/launch.json
+echo "          \"pipeProgram\": \"bash\"," >> .vscode/launch.json
+echo "          \"pipeArgs\": [\"-c\"]," >> .vscode/launch.json
+echo "          \"debuggerPath\": \"${DEB}/netcoredbg\"," >> .vscode/launch.json
+echo "          \"quoteArgs\": true" >> .vscode/launch.json
+echo "      }" >> .vscode/launch.json
+echo "  }" >> .vscode/launch.json
+echo ",]" >> .vscode/launch.json
+echo "}"    >> .vscode/launch.json
+
+#create tasks.json line by line
+echo "{" > .vscode/tasks.json
+echo "    \"version\": \"2.0.0\"," >> .vscode/tasks.json
+echo "    \"tasks\": [" >> .vscode/tasks.json
+echo "        {" >> .vscode/tasks.json
+echo "            \"label\": \"build\"," >> .vscode/tasks.json
+echo "            \"command\": \"dotnet\"," >> .vscode/tasks.json
+echo "            \"type\": \"process\"," >> .vscode/tasks.json
+echo "            \"args\": [" >> .vscode/tasks.json
+echo "                \"build\"," >> .vscode/tasks.json
+echo "                \"\${workspaceFolder}/${PROJ: -11}\"," >> .vscode/tasks.json
+echo "               \"/property:GenerateFullPaths=true\"," >> .vscode/tasks.json
+echo "                \"/consoleloggerparameters:NoSummary\"" >> .vscode/tasks.json
+echo "            ]," >> .vscode/tasks.json
+echo "            \"problemMatcher\": \"\$msCompile\"" >> .vscode/tasks.json
+echo "        }," >> .vscode/tasks.json
+echo "        {" >> .vscode/tasks.json
+echo "            \"label\": \"publish\"," >> .vscode/tasks.json
+echo "            \"command\": \"dotnet\"," >> .vscode/tasks.json
+echo "            \"type\": \"process\"," >> .vscode/tasks.json
+echo "      \"args\": [" >> .vscode/tasks.json
+echo "                \"publish\"," >> .vscode/tasks.json
+echo "                \"\${workspaceFolder}/${PROJ: -11}\"," >> .vscode/tasks.json
+echo "                \"/property:GenerateFullPaths=true\"," >> .vscode/tasks.json
+echo "                \"/consoleloggerparameters:NoSummary\"" >> .vscode/tasks.json
+echo "            ]," >> .vscode/tasks.json
+echo "            \"problemMatcher\": \"\$msCompile\"" >> .vscode/tasks.json
+echo "        }," >> .vscode/tasks.json
+echo "        {" >> .vscode/tasks.json
+echo "            \"label\": \"watch\"," >> .vscode/tasks.json
+echo "            \"command\": \"dotnet\"," >> .vscode/tasks.json
+echo "            \"type\": \"process\"," >> .vscode/tasks.json
+echo "            \"args\": [" >> .vscode/tasks.json
+echo "                \"watch\"," >> .vscode/tasks.json
+echo "                \"run\"," >> .vscode/tasks.json
+echo "                \"\${workspaceFolder}/${PROJ: -11}\"," >> .vscode/tasks.json
+echo "                \"/property:GenerateFullPaths=true\"," >> .vscode/tasks.json
+echo "                \"/consoleloggerparameters:NoSummary\"" >> .vscode/tasks.json
+echo "            ]," >> .vscode/tasks.json
+echo "            \"problemMatcher\": \"\$msCompile\"" >> .vscode/tasks.json
+echo "        }" >> .vscode/tasks.json
+echo "    ]" >> .vscode/tasks.json
+echo "}" >> .vscode/tasks.json
+
+echo "Done!"
+}
+
+if [ -d ".vscode" ]
+then
+    echo "The .vscode folder exists. Would you like to delete it? (y/n)"
+    read ANS
+    if [ $ANS == "y" ]
+    then
+        rm -rf .vscode
+        create
+    elif [ $ANS == "n" ]
+    then
+        echo "Nothing happened."
+    else
+        echo "Unrecognized character! Nothing happened."
+    fi
+else
+    create
+fi
